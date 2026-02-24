@@ -73,30 +73,14 @@ fi
 BG_DURATION=$(ffprobe -v quiet -show_entries format=duration -of csv=p=0 "$WORK_DIR/background.wav")
 echo "Background track: ${BG_DURATION}s"
 
-# ── Step 2: Trim trailing silence from voiceover ──
+# ── Step 2: Prepare voiceover (convert to WAV, full track — no trimming) ──
 
 echo "=== Preparing voiceover ==="
 
-LAST_SPEECH_END=$(ffmpeg -i "$VOICEOVER" -af "silencedetect=noise=-40dB:d=0.5" -f null - 2>&1 \
-    | grep "silence_start" | tail -1 | sed 's/.*silence_start: //' | cut -d' ' -f1)
+ffmpeg -y -i "$VOICEOVER" -ar 44100 -ac 2 "$WORK_DIR/voiceover_trimmed.wav" 2>/dev/null
 
-VO_DURATION=$(ffprobe -v quiet -show_entries format=duration -of csv=p=0 "$VOICEOVER")
-
-if [ -n "$LAST_SPEECH_END" ]; then
-    TRIM_END=$(python3 -c "print(min(float('$LAST_SPEECH_END') + 0.5, float('$VO_DURATION')))")
-    echo "Trimming voiceover from ${VO_DURATION}s to ${TRIM_END}s"
-else
-    TRIM_END="$VO_DURATION"
-    echo "No trailing silence detected, keeping full voiceover"
-fi
-
-ffmpeg -y -i "$VOICEOVER" \
-    -af "atrim=0:$TRIM_END,asetpts=PTS-STARTPTS,afade=t=out:st=$(python3 -c "print(float('$TRIM_END')-0.5)"):d=0.5" \
-    -ar 44100 -ac 2 \
-    "$WORK_DIR/voiceover_trimmed.wav" 2>/dev/null
-
-TRIMMED_VO_DUR=$(ffprobe -v quiet -show_entries format=duration -of csv=p=0 "$WORK_DIR/voiceover_trimmed.wav")
-echo "Trimmed voiceover: ${TRIMMED_VO_DUR}s"
+VO_DURATION=$(ffprobe -v quiet -show_entries format=duration -of csv=p=0 "$WORK_DIR/voiceover_trimmed.wav")
+echo "Voiceover: ${VO_DURATION}s"
 
 # ── Step 3: Generate volume envelope for background music ──
 #

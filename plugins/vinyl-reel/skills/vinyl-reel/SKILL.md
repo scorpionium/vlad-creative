@@ -220,6 +220,8 @@ bash <skill-path>/scripts/mix_audio.sh \
 
 ### 4e. Combine Video + Audio (English only)
 
+There is **no Ukrainian video**. The Ukrainian output is an audio track only (exported in Phase 5c).
+
 ```bash
 # English assembled version
 ffmpeg -y -i video_silent.mp4 -i .work/mixed_audio_en.wav \
@@ -279,26 +281,29 @@ Write titles and descriptions in **both languages**. Save both to
 **Band name in ALL CAPS** everywhere in both titles and descriptions — e.g., IRON MAIDEN,
 METALLICA, DRUDKH, PINK FLOYD. Apply this consistently in both English and Ukrainian text.
 
-**English title format**: `BAND NAME — Album Title 🎵 Edition Info`
+**English title format**: `BAND NAME - Album Title 🎵 Edition Info`
 - Keep under 70 characters
 - Include relevant emoji (🎵 📀 🔥 etc.)
+- Use a simple hyphen `-` as separator, not an em dash
 
 **English description format**:
 ```
-BAND NAME — Album Title (Original Title if different language)
-Edition Name — Label
+BAND NAME - Album Title (Original Title if different language)
+Edition Name / Label
 
-Vinyl variant description — limited to N copies, numbering details.
+Vinyl variant description - limited to N copies, numbering details.
 
 This edition includes:
-— feature 1
-— feature 2
-— ...
+- feature 1
+- feature 2
+- ...
 
 1-2 sentences about the album's musical significance.
 
 #hashtags (artist, genre, vinyl, vinylunboxing, vinylcollection, label, etc.)
 ```
+
+Do not use em dashes (—) anywhere in titles or descriptions.
 
 **Ukrainian title and description**: same structure, fully translated into Ukrainian.
 Keep BAND NAME in all caps in the Ukrainian text as well.
