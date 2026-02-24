@@ -31,7 +31,7 @@ Album Name/
 
 ## Setup Requirement
 
-Copy `skills/vinyl-reel/.env.example` → `skills/vinyl-reel/.env` and provide an ElevenLabs API key. The voice ID is pre-filled for a cloned voice.
+Copy `skills/vinyl-reel/.env.example` → `skills/vinyl-reel/.env` and provide a voiceover API key. The voice ID is pre-filled for a cloned voice.
 
 ## System Dependencies
 
@@ -44,7 +44,7 @@ The scripts require: **Python 3**, **ffmpeg**, and **ffprobe**. The ffmpeg build
 | 1. Scan & catalog clips | `analyze_clips.py` (ffprobe) | No |
 | 2. Research album | Web search | No |
 | 3. Write EN + UA voiceover scripts | Claude | **Yes — user approves scripts** |
-| 4. Generate voiceover | ElevenLabs API | **Yes — user uploads MP3 files** |
+| 4. Generate voiceover | Voiceover API | **Yes — user uploads MP3 files** |
 | 5. Arrange, mix, assemble video | ffmpeg + `mix_audio.sh` | No |
 | 6. Export 3 outputs + metadata | ffmpeg + chromakey | No |
 
