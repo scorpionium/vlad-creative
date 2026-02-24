@@ -1,0 +1,9 @@
+{
+  "name": "vlad-creative-plugin",
+  "version": "0.1.0",
+  "description": "Vinyl unboxing reel creator — generates polished 9:16 short-form videos from raw footage",
+  "author": {
+    "name": "Пан Володимир"
+  },
+  "keywords": ["vinyl", "reel", "unboxing", "video", "youtube-shorts", "instagram"]
+}
