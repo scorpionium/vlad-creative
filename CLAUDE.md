@@ -27,7 +27,7 @@ To add a new plugin: create `plugins/<plugin-name>/` with its own `.claude-plugi
 ## Installing This Marketplace
 
 ```
-/plugin marketplace add scorpionium/vlad-creative-plugin
+/plugin marketplace add scorpionium/vlad-creative
 /plugin install vinyl-reel@vlad-creative
 ```
 

@@ -1,1 +1,13 @@
+# Claude Code local settings
 .claude/settings.local.json
+
+# Generated during skill runs — never commit production artifacts
+**/.work/
+**/.thumbnails/
+voiceover*.mp3
+voiceover_script_*.md
+*_Reel.mp4
+*_Reel_Clean.mp4
+*_Reel_UA.mp4
+*_Audio_UA.m4a
+*_metadata.md
