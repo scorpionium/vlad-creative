@@ -2,9 +2,9 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Project Purpose
+## Overview
 
-This is a Claude Code **plugin marketplace** — a collection of creative skills for content creation. Currently contains one plugin (`vinyl-reel`). New plugins are added as subdirectories under `plugins/`.
+This repo is a Claude Code **plugin marketplace** for creative and media production skills. Plugins live under `plugins/`, each with its own manifest and skill/command files. New plugins are added as subdirectories there, plus an entry in `.claude-plugin/marketplace.json`.
 
 ## Repo Structure
 
