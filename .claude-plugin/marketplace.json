@@ -1,0 +1,24 @@
+{
+  "name": "vlad-creative",
+  "owner": {
+    "name": "Пан Володимир",
+    "email": ""
+  },
+  "metadata": {
+    "description": "Creative skills for content creators — video production, visual storytelling, and social media exports",
+    "pluginRoot": "./plugins"
+  },
+  "plugins": [
+    {
+      "name": "vinyl-reel",
+      "source": "./plugins/vinyl-reel",
+      "description": "Creates polished 9:16 vinyl unboxing reels (YouTube Shorts & Instagram Reels) from raw footage and your own recorded voiceover",
+      "version": "0.1.0",
+      "author": {
+        "name": "Пан Володимир"
+      },
+      "keywords": ["vinyl", "reel", "unboxing", "video", "youtube-shorts", "instagram"],
+      "category": "creative"
+    }
+  ]
+}

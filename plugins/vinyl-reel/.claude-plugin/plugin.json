@@ -1,0 +1,13 @@
+{
+  "name": "vinyl-reel",
+  "version": "0.1.0",
+  "description": "Creates polished 9:16 vinyl unboxing reels (YouTube Shorts & Instagram Reels) from raw footage and your own recorded voiceover",
+  "author": {
+    "name": "Пан Володимир",
+    "url": "https://github.com/scorpionium"
+  },
+  "repository": "https://github.com/scorpionium/vlad-creative-plugin",
+  "homepage": "https://github.com/scorpionium/vlad-creative-plugin",
+  "license": "MIT",
+  "keywords": ["vinyl", "reel", "unboxing", "video", "youtube-shorts", "instagram", "creative"]
+}
