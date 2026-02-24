@@ -4,8 +4,9 @@
 # Audio design:
 #   - Background music: all samples from audio/ concatenated with 1s crossfades
 #   - Voiceover starts at 3 seconds into the video (3s of music-only intro)
-#   - Background at 100% when no voiceover is speaking (intro + 5s pauses + tail)
+#   - Background at 100% when no voiceover is speaking (intro + long pauses + tail)
 #   - Background ducked to 10% while voiceover speech is active
+#   - Short pauses under 1s stay ducked (background does NOT rise back up)
 #   - Smooth 0.5s ramps between 10% and 100% at every transition
 #   - Voiceover always at 100% volume
 #
@@ -195,11 +196,12 @@ export VO_TRANS="0.5"
 VOLUME_EXPR=$(VO_FILE="$WORK_DIR/voiceover_trimmed.wav" VO_OFFSET="3.0" VO_TRANS="0.5" python3 - << 'PYTHON'
 import subprocess, re, sys, os
 
-voiceover = os.environ["VO_FILE"]
+voiceover    = os.environ["VO_FILE"]
 start_offset = float(os.environ["VO_OFFSET"])
 transition   = float(os.environ["VO_TRANS"])
 low_vol      = 0.1
 high_vol     = 1.0
+min_pause    = 1.0  # background only rises for pauses longer than this
 
 result = subprocess.run(
     ["ffmpeg", "-i", voiceover, "-af", "silencedetect=noise=-40dB:d=0.3", "-f", "null", "-"],
@@ -216,14 +218,29 @@ total = float(subprocess.run(
     capture_output=True, text=True
 ).stdout.strip())
 
-speech_segs = []
+# Build raw speech segments (gaps between silence intervals)
+raw_segs = []
 pos = 0.0
 for ss, se in silence_ivs:
     if ss > pos + 0.1:
-        speech_segs.append((pos, ss))
+        raw_segs.append((pos, ss))
     pos = se
 if pos < total - 0.1:
-    speech_segs.append((pos, total))
+    raw_segs.append((pos, total))
+
+# Merge speech segments separated by short silences (< min_pause).
+# Background stays ducked through short pauses; only rises on real pauses.
+speech_segs = []
+for seg in raw_segs:
+    if not speech_segs:
+        speech_segs.append(list(seg))
+    else:
+        gap = seg[0] - speech_segs[-1][1]
+        if gap < min_pause:
+            speech_segs[-1][1] = seg[1]  # extend through the short silence
+        else:
+            speech_segs.append(list(seg))
+speech_segs = [tuple(s) for s in speech_segs]
 
 shifted = [(s + start_offset, e + start_offset) for s, e in speech_segs]
 

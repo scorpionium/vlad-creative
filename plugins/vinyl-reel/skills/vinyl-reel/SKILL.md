@@ -22,7 +22,7 @@ first for script approval, then for voiceover file upload. Phases 4-5 resume aut
 ```
 Phase 1: Scan & Catalog  ──► Phase 2: Research Album  ──► Phase 3: Write Voiceover Scripts EN+UA
   (PAUSE 1: approve scripts)  ──►  (PAUSE 2: user uploads voiceover files)
-Phase 4: Arrange & Mix  ──► Phase 5: Export & Metadata (EN + UA)
+Phase 4: Arrange & Mix  ──► Phase 5: Export & Metadata (EN video + UA audio track)
 ```
 
 ## Expected Folder Structure
@@ -197,20 +197,20 @@ Run the audio mixing script **twice** — once per voiceover language. The scrip
 1. Concatenates **all** audio samples from `audio/` with smooth 1-second crossfades
 2. Pads the voiceover with 3 seconds of silence (so voiceover begins at t=3 in the video)
 3. Uses silence detection to find speech vs. pause periods in the voiceover
-4. Drops background music to **10% volume** during speech, returns to **100%** during
-   pauses and after the voiceover ends
+4. Drops background music to **10% volume** during speech, returns to **100%** only during
+   pauses **longer than 1 second** — short hesitations stay ducked
 5. Applies smooth 0.5-second ramps at every volume transition
 6. Keeps the voiceover itself at 100% volume throughout
 
 ```bash
-# English mix
+# English mix (for video)
 bash <skill-path>/scripts/mix_audio.sh \
   "<working-folder>" \
   "<video-duration>" \
   "<working-folder>/voiceover.mp3" \
   "<working-folder>/.work/mixed_audio_en.wav"
 
-# Ukrainian mix (same background music, different voiceover)
+# Ukrainian mix (audio track only — for YouTube language track upload)
 bash <skill-path>/scripts/mix_audio.sh \
   "<working-folder>" \
   "<video-duration>" \
@@ -218,16 +218,12 @@ bash <skill-path>/scripts/mix_audio.sh \
   "<working-folder>/.work/mixed_audio_ua.wav"
 ```
 
-### 4e. Combine Video + Audio (Both Versions)
+### 4e. Combine Video + Audio (English only)
 
 ```bash
 # English assembled version
 ffmpeg -y -i video_silent.mp4 -i .work/mixed_audio_en.wav \
   -c:v copy -c:a aac -b:a 192k -shortest assembled_en.mp4
-
-# Ukrainian assembled version
-ffmpeg -y -i video_silent.mp4 -i .work/mixed_audio_ua.wav \
-  -c:v copy -c:a aac -b:a 192k -shortest assembled_ua.mp4
 ```
 
 ## Phase 5: Export & Metadata
@@ -263,21 +259,16 @@ It plays once through and stops naturally — no looping.
 cp assembled_en.mp4 "<Album>_Reel_Clean.mp4"
 ```
 
-### 5c. YouTube Shorts Version — Ukrainian (Subscribe overlay at 30s)
+### 5c. Ukrainian Audio Track (for YouTube language section)
 
-Same approach as 5a, starting from `assembled_ua.mp4`:
+Export the Ukrainian mixed audio as a standalone AAC file. Upload this to YouTube via
+**Subtitles → Add language → Ukrainian** to make the Ukrainian audio track available
+in the language selector — no separate video needed.
 
 ```bash
-ffmpeg -y \
-  -i assembled_ua.mp4 \
-  -itsoffset 30 -i "$SUBSCRIBE" \
-  -filter_complex " \
-    [1:v]chromakey=0x00FF00:0.3:0.1,scale=1080:-1[sub]; \
-    [0:v][sub]overlay=(W-w)/2:(H-h)/2[out]" \
-  -map "[out]" -map "0:a" \
-  -c:v libx264 -preset fast -crf 18 -pix_fmt yuv420p -r 30 \
-  -c:a copy \
-  "<Album>_Reel_UA.mp4"
+ffmpeg -y -i .work/mixed_audio_ua.wav \
+  -c:a aac -b:a 192k \
+  "<Album>_Audio_UA.m4a"
 ```
 
 ### 5d. Generate YouTube Metadata (English + Ukrainian)
@@ -331,6 +322,8 @@ All video outputs use:
   This is expected and looks fine for unboxing content.
 - If `voiceover.mp3` or `voiceover_ua.mp3` are not found, remind the user of the exact
   expected filenames and wait.
+- The Ukrainian output is audio-only (`<Album>_Audio_UA.m4a`). Instruct the user to upload
+  it to YouTube via **Subtitles → Add language → Ukrainian**.
 - If total video exceeds 59 seconds, trim the turntable/playing sections (they have the
   most flexibility) to fit.
 - If the concatenated background music is shorter than the video duration, `apad` fills
