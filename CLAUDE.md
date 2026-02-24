@@ -29,10 +29,6 @@ Album Name/
 └── audio/    # background music samples (.m4a .mp3 .wav .aac .flac .ogg)
 ```
 
-## Setup Requirement
-
-Copy `skills/vinyl-reel/.env.example` → `skills/vinyl-reel/.env` and provide a voiceover API key. The voice ID is pre-filled for a cloned voice.
-
 ## System Dependencies
 
 The scripts require: **Python 3**, **ffmpeg**, and **ffprobe**. The ffmpeg build must include the filters: `silencedetect`, `acrossfade`, `adelay`, `volume`, `afade`, `alimiter`, `chromakey`, `drawtext`. Text overlays use `LiberationSans` or `DejaVuSans`.
@@ -44,7 +40,7 @@ The scripts require: **Python 3**, **ffmpeg**, and **ffprobe**. The ffmpeg build
 | 1. Scan & catalog clips | `analyze_clips.py` (ffprobe) | No |
 | 2. Research album | Web search | No |
 | 3. Write EN + UA voiceover scripts | Claude | **Yes — user approves scripts** |
-| 4. Generate voiceover | Voiceover API | **Yes — user uploads MP3 files** |
+| 4. Record voiceover | User records & drops MP3s in folder | **Yes — wait for user confirmation** |
 | 5. Arrange, mix, assemble video | ffmpeg + `mix_audio.sh` | No |
 | 6. Export 3 outputs + metadata | ffmpeg + chromakey | No |
 
