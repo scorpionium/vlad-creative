@@ -300,6 +300,8 @@ This edition includes:
 
 1-2 sentences about the album's musical significance.
 
+Subscribe for weekly metal vinyl from my collection.
+
 #hashtags (artist, genre, vinyl, vinylunboxing, vinylcollection, label, etc.)
 ```
 

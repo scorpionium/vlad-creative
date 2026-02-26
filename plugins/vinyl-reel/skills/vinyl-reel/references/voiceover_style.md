@@ -29,10 +29,10 @@ Pick the most interesting facts and leave the rest out. Depth over breadth.
 ## Structure Template
 
 ### 1. Hook (3-5s of speech)
-Open with energy. Name the artist and album. Include the original language title if applicable.
-Keep it short — just enough to hook the viewer.
+Open with "here's one from my metal vinyl collection" (or a natural variation), then name
+the artist and album. Include the original language title if applicable.
 
-Example: "Okay, check this out — Drudkh, Кров у наших криницях, Blood In Our Wells!"
+Example: "Here's one from my metal vinyl collection — Drudkh, Кров у наших криницях, Blood In Our Wells!"
 
 ### [pause — ~5s]
 
@@ -60,6 +60,11 @@ to the music. Keep the closer casual and short.
 
 Example: "Crystal clear, orange and red marbled — limited to 333 copies, foil-numbered.
 Alright — let's hear it."
+
+### 5. CTA (2-3s of speech)
+End with a brief, natural subscribe prompt. Keep it personal and low-pressure.
+
+Example: "If you're into vinyl like this, subscribe — I post every week."
 
 ## Formatting Rules
 
@@ -108,7 +113,7 @@ Read with energy and enthusiasm. Pauses marked with [pause].
 - Don't open with "Hey guys" or "What's up everyone" — jump straight into the record
 - Don't mention the video format ("in today's short" / "in this reel")
 - Don't include a track listing — there's no time and it kills the energy
-- Don't end with a call to action ("like and subscribe") — the subscribe overlay handles that
+- Don't open with "Hey guys" or a generic greeting — the collection opener handles that
 - Don't use superlatives for everything ("amazing", "incredible", "insane") — pick one moment
   to really emphasize
 - Don't write the Ukrainian script as a literal translation — let it breathe naturally
