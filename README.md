@@ -5,7 +5,7 @@ A Claude Code plugin marketplace with creative and media production skills.
 ## Install
 
 ```
-/plugin marketplace add scorpionium/vlad-creative-plugin
+/plugin marketplace add scorpionium/vlad-creative
 ```
 
 Then install individual plugins:
@@ -19,6 +19,7 @@ Then install individual plugins:
 | Plugin | Trigger | Description |
 |--------|---------|-------------|
 | [`vinyl-reel`](plugins/vinyl-reel) | `/vinyl-reel` or describe a vinyl unboxing task | Produces 9:16 YouTube Shorts and Instagram Reels from raw footage, with bilingual voiceover and background music |
+| [`discography-reel`](plugins/discography-reel) | `/discography-reel` or describe a band discography reel | Produces a ≤59 s 9:16 reel showcasing a band's complete studio discography — per-album clips, crossfade assembly, song suggestions, EN + UA metadata |
 
 ## Adding a Plugin
 
