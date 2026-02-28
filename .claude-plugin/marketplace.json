@@ -18,6 +18,17 @@
       },
       "keywords": ["vinyl", "reel", "unboxing", "video", "youtube-shorts", "instagram"],
       "category": "creative"
+    },
+    {
+      "name": "discography-reel",
+      "source": "./plugins/discography-reel",
+      "description": "Creates a 9:16 discography reel showcasing a band's full studio discography from per-album video clips and audio samples",
+      "version": "0.1.1",
+      "author": {
+        "name": "Пан Володимир"
+      },
+      "keywords": ["discography", "reel", "band", "video", "youtube-shorts", "music"],
+      "category": "creative"
     }
   ]
 }
