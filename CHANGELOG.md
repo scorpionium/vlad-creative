@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [0.1.5] – 2026-02-28
+
+### Changed (`vinyl-reel`)
+- Subscribe animation overlay: added `eof_action=pass` so the base video continues cleanly after the animation ends, preventing last-frame freeze
+- Updated `ffmpeg_patterns.md` subscribe overlay example to use `-itsoffset 30` on the full assembled video (replaces outdated single-clip approach)
+
 ## 2026-02-28
 
 ### Added

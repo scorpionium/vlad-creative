@@ -88,25 +88,32 @@ ffmpeg -y -f concat -safe 0 -i concat_list.txt \
 
 ## Subscribe Overlay (Chromakey)
 
-The subscribe animation has a green screen background. Overlay it on the beauty shot:
+The subscribe animation has a green screen background. Overlay it on the full assembled
+video at exactly the **30-second mark** using `-itsoffset 30`. The animation plays once
+and stops; `eof_action=pass` ensures the base video continues cleanly afterwards:
 
 ```bash
+SUBSCRIBE="<working-folder>/subscribe_btn_animation_small.mp4"
+[ ! -f "$SUBSCRIBE" ] && SUBSCRIBE="<skill-path>/assets/subscribe_btn_animation_small.mp4"
+
 ffmpeg -y \
-  -i beauty_shot.mp4 \
-  -i subscribe_btn_animation_small.mp4 \
+  -i assembled_en.mp4 \
+  -itsoffset 30 -i "$SUBSCRIBE" \
   -filter_complex " \
     [1:v]chromakey=0x00FF00:0.3:0.1,scale=1080:-1[sub]; \
-    [0:v][sub]overlay=(W-w)/2:(H-h)/2:shortest=1[out]" \
-  -map "[out]" \
-  -c:v libx264 -preset fast -crf 18 -pix_fmt yuv420p -r 30 -an \
-  -t <duration> \
-  beauty_with_subscribe.mp4
+    [0:v][sub]overlay=(W-w)/2:(H-h)/2:eof_action=pass[out]" \
+  -map "[out]" -map "0:a" \
+  -c:v libx264 -preset fast -crf 18 -pix_fmt yuv420p -r 30 \
+  -c:a copy \
+  output_yt_shorts.mp4
 ```
 
 Key settings:
+- `-itsoffset 30` — delays stream [1] so the animation starts at t=30 in the output
 - `scale=1080:-1` — full width of the video, maintains aspect ratio
 - `overlay=(W-w)/2:(H-h)/2` — centered both horizontally and vertically
 - `chromakey=0x00FF00:0.3:0.1` — green screen removal (similarity=0.3, blend=0.1)
+- `eof_action=pass` — once the animation ends, pass the base video through cleanly
 
 ## Audio: Sidechain Compression
 

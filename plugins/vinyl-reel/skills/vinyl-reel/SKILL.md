@@ -245,7 +245,7 @@ ffmpeg -y \
   -itsoffset 30 -i "$SUBSCRIBE" \
   -filter_complex " \
     [1:v]chromakey=0x00FF00:0.3:0.1,scale=1080:-1[sub]; \
-    [0:v][sub]overlay=(W-w)/2:(H-h)/2[out]" \
+    [0:v][sub]overlay=(W-w)/2:(H-h)/2:eof_action=pass[out]" \
   -map "[out]" -map "0:a" \
   -c:v libx264 -preset fast -crf 18 -pix_fmt yuv420p -r 30 \
   -c:a copy \
