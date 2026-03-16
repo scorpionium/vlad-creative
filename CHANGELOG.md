@@ -10,6 +10,9 @@
 
 ## [0.2.0] – 2026-03-16
 
+### Changed (`vinyl-reel`) — 0.2.0
+- **No-voiceover mode**: skill now asks whether to include voiceover after Phase 1 scan (or auto-detects from the trigger message). In no-voiceover mode Phase 3 (script writing + recording pauses) is skipped entirely; Phase 4d produces a plain music-only mix (crossfaded samples, no ducking); Phase 5c (UA audio track) is omitted. Voiceover mode behaviour is unchanged.
+
 ### Changed (`discography-reel`) — 0.2.0
 - **Two videos per album**: each album section is now composed of two sub-clips — `1_cover.*` (cover art footage, capped at 4 s) and `2_turntable.*` (LP on turntable, remainder of the album's time slot). Phase 2 instructs the user to drop both files and collects per-album cover start offsets before assembly begins.
 - `scan_assets.py`: now validates exactly 2 video files per album folder and reports them as `cover_video` / `turntable_video` (alphabetical sort) with individual durations.

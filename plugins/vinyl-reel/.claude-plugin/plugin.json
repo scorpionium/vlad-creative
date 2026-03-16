@@ -1,7 +1,7 @@
 {
   "name": "vinyl-reel",
-  "version": "0.1.6",
-  "description": "Creates polished 9:16 vinyl unboxing reels (YouTube Shorts & Instagram Reels) from raw footage and your own recorded voiceover",
+  "version": "0.2.0",
+  "description": "Creates polished 9:16 vinyl unboxing reels (YouTube Shorts & Instagram Reels) from raw footage — with or without voiceover narration",
   "author": {
     "name": "Пан Володимир",
     "url": "https://github.com/scorpionium"
