@@ -41,8 +41,10 @@ Use the band popularity signal from Phase 2 research to pick the right opening a
 - **Popular band**: Skip band context entirely, open directly with what makes *this pressing* rare
 
 ### 1. Hook (3-5s of speech)
-A single surprising statement — the most unusual fact about this specific pressing.
+A single surprising statement — the most unusual fact about this specific pressing or reissue.
 Do NOT open with "here's one from my collection" (that framing belongs in the text overlay).
+The strongest hooks pair a number or rarity with *why it matters*, then the rest of the
+voiceover expands it into the band → album → this-reissue story.
 
 **Niche band example**: "This Ukrainian band has been making atmospheric black metal for
 25 years and almost nobody outside Eastern Europe knows they exist."
@@ -50,11 +52,17 @@ Do NOT open with "here's one from my collection" (that framing belongs in the te
 **Popular band example**: "This exact brown and bone splatter colorway was pressed exactly
 300 times and has never been repressed."
 
+**Reissue example**: "This album was out of print on vinyl for two decades — this is the
+first official repress, straight from the original master tapes."
+
 ### [pause — ~5s]
 
 ### 2. Album Significance + Band Context (8-10s of speech)
 Why does this album matter? What's special about the music? Where does it sit in the
-band's discography? Include cultural or literary context if applicable.
+band's discography? Include cultural or literary context if applicable. Work in what makes
+*this* release distinct — first-ever vinyl, anniversary edition, remaster, or a licensed
+reissue of a rare original — so the story is about the band, the album, and this pressing,
+not just the physical specs.
 For niche bands: this is where you also say the band name and album title.
 For popular bands: this is where you add depth beyond what fans already know.
 

@@ -1,12 +1,13 @@
 # Changelog
 
-## [Unreleased]
+## [0.4.0] – 2026-06-29
 
-### Changed (`vinyl-reel`) — 0.1.6
-- Subscribe overlay now appears at t=20s (was t=30s)
-
-### Changed (`discography-reel`) — 0.1.2
-- Subscribe overlay now appears at t=20s (was t=30s); skip-condition updated to `total_sec <= 20`
+### Changed (`vinyl-reel`) — 0.4.0
+- **Bigger, raised captions**: lower-third caption overlays grew from 42/30px at the very bottom (`y=h-160`) to 64/46px raised to 30% from the bottom (`y=h*0.70`) — large and clear on mobile, clear of platform UI chrome. Updated in `SKILL.md` and `references/ffmpeg_patterns.md`.
+- **Story-driven subtitles**: the on-screen caption sequence now tells a mini-story — band → album → this specific release/reissue — instead of dry technical labels. Both the standard and tight-cut structure tables were rewritten with band/album/reissue beats, and Phase 4b gained a "Caption content" guidance block (captions carry the whole narrative in no-voiceover mode).
+- **Reissue-context research**: Phase 2 adds a research bullet identifying whether this is a first-ever vinyl pressing, anniversary edition, remaster, or licensed reissue — feeding the captions and the hook.
+- **Stronger hook**: hook framings expanded with first-time-on-vinyl and revival/story angles, plus guidance that the best hook pairs a hard number/rarity with the reason it matters. Voiceover hook examples refreshed in `references/voiceover_style.md`.
+- **No-music (silent) mode**: when `audio/` has no samples, the skill now asks whether the intent is a fully silent reel instead of hard-erroring in `mix_audio.sh`. Confirmed no-music mode skips audio mixing entirely and exports with no audio track (subscribe-overlay export drops the `0:a` map).
 
 ## [0.3.0] – 2026-04-06
 
