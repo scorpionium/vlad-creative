@@ -27,7 +27,7 @@ orientation and outputs clean 1080x1920:
 
 ## Text Overlays
 
-Two-line overlay: bold title + lighter subtitle, centered at bottom with shadow.
+Two-line overlay: bold title + lighter subtitle, centered and raised to ~30% from the bottom, with shadow.
 
 Font detection — check availability in this order:
 ```bash
@@ -38,14 +38,14 @@ fc-list | grep -i "dejavu"      # Fallback
 Two-line text overlay filter:
 ```
 drawtext=fontfile=/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf:\
-  text='Title Line':fontcolor=white:fontsize=42:\
-  x=(w-text_w)/2:y=h-160:\
-  shadowcolor=black@0.7:shadowx=3:shadowy=3:\
+  text='Title Line':fontcolor=white:fontsize=64:\
+  x=(w-text_w)/2:y=h*0.70:\
+  shadowcolor=black@0.7:shadowx=4:shadowy=4:\
   enable='between(t,START,END)',\
 drawtext=fontfile=/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf:\
-  text='Subtitle Line':fontcolor=white@0.9:fontsize=30:\
-  x=(w-text_w)/2:y=h-110:\
-  shadowcolor=black@0.7:shadowx=2:shadowy=2:\
+  text='Subtitle Line':fontcolor=white@0.9:fontsize=46:\
+  x=(w-text_w)/2:y=h*0.70+90:\
+  shadowcolor=black@0.7:shadowx=3:shadowy=3:\
   enable='between(t,START,END)'
 ```
 
@@ -121,7 +121,9 @@ Key settings:
 ## Hook Text Overlay (0-2s)
 
 Bold scarcity/curiosity text over the opening shot, fades out before voiceover begins.
-Use the most striking fact from research (copy count, colorway uniqueness, resale value).
+Use the most striking fact from research (copy count, colorway uniqueness, resale value,
+first-time-on-vinyl, reissue significance). The strongest hook pairs a hard number or rarity
+with the reason it matters — the band's cult status or what makes this reissue significant.
 
 ```bash
 drawtext=fontfile=<bold-font>:text='Only 300 copies worldwide':\

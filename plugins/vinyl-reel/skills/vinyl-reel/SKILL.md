@@ -38,6 +38,10 @@ instead of 55-59 seconds. Tighter clip selection, shorter script. Can be combine
 either voiceover or no-voiceover mode. The user can request it in their trigger message
 ("tight cut", "short version", "35 seconds") or be offered it after Phase 1.
 
+**No-music mode** (silent): entered when the `audio/` folder has no samples and the user
+confirms they want a silent reel (see Mode Selection). The reel is exported with **no audio
+track at all** — no background music and no voiceover. The video assembly is unchanged.
+
 ## Expected Folder Structure
 
 The user selects a working folder. Inside it:
@@ -78,6 +82,17 @@ turntable, beauty shot, etc.).
 
 ## Mode Selection (after Phase 1)
 
+**First, check for background music.** Count audio samples in `audio/` (extensions:
+`m4a mp3 wav aac flac ogg`). **If there are zero samples**, ask before continuing:
+
+> "No background-music samples found in `audio/`. Do you want a no-music reel (the reel will
+> be fully silent — no background track), or did you mean to add music samples first? Note: a
+> silent reel will not include any voiceover audio either."
+
+If the user confirms a no-music reel → set **no-music mode** (fully silent) and skip the
+voiceover/length questions below (there is no audio to mix and no voiceover to record).
+Otherwise, wait for the user to add samples to `audio/`, then re-scan and continue.
+
 If the user's trigger message explicitly mentions "no voiceover", "music only",
 "instrumental", or similar — set **no-voiceover mode** automatically without asking.
 
@@ -106,8 +121,11 @@ Use web search to gather information about this specific album and edition:
    - Vinyl colorway description (exact name, unique characteristics)
    - Resale/market value if notable (Discogs average)
    - Bonus content, packaging features
-4. **Cultural context**: what makes this album important, fan reception, notable influences
-5. **Band popularity signal**: run a quick check (Spotify monthly listeners, Last.fm plays, or
+4. **Reissue/repress context**: is this a first-ever vinyl pressing, an anniversary edition,
+   a remaster, or a licensed/official reissue of a rare original? Note what distinguishes
+   this release from prior pressings — this feeds the on-screen captions and the hook.
+5. **Cultural context**: what makes this album important, fan reception, notable influences
+6. **Band popularity signal**: run a quick check (Spotify monthly listeners, Last.fm plays, or
    general web search) to gauge whether the band is niche or widely known. This shapes the
    hook strategy:
    - **Niche band** (< ~500k Spotify listeners or little mainstream coverage): use a
@@ -146,9 +164,11 @@ Key requirements:
   history — open with the most unusual or rare fact identified in Phase 2.
 - **Hook line**: The first sentence must be a standalone statement of scarcity, rarity, or
   surprise. Examples: "Only 300 copies of this exist in the entire world." /
-  "This exact colorway was never pressed again." / "This sat in a Kyiv record shop for
-  a decade before anyone noticed what it was." Do NOT open with "Here's one from my
-  collection" or any variation — that's reserved for the text overlay hook, not the voice.
+  "This exact colorway was never pressed again." / "This album was impossible to find on
+  vinyl for twenty years — until now." / "This sat in a Kyiv record shop for a decade before
+  anyone noticed what it was." Do NOT open with "Here's one from my collection" or any
+  variation — that's reserved for the text overlay hook, not the voice. After the hook, the
+  voice expands it into the band → album → this-reissue story (don't just restate the number).
 - **Band popularity shapes the hook** (use Phase 2 popularity signal):
   - Niche band: open with curiosity framing about the band's cult status, then pivot to the pressing
   - Popular band: skip the band intro, go straight to what makes *this pressing* exceptional
@@ -211,10 +231,14 @@ curiosity or scarcity hook pulled from Phase 2 research. Choose ONE of these fra
 - Pressing quantity: `"Only 300 copies worldwide"`
 - Colorway uniqueness: `"Never pressed in this color again"`
 - Value/rarity: `"$180 on Discogs — I paid $45"`
+- First-time-on-vinyl: `"First time on vinyl in 30 years"`
+- Revival/story: `"Lost for decades, finally repressed"`
 - Mystery: `"Most underrated pressing in my entire collection"`
 
-This text appears for the first 2 seconds, before any voiceover. It is the hook that stops
-the scroll. Pick the most factually unusual detail from Phase 2.
+The strongest hook pairs a hard number or rarity with the *reason it matters* — the band's
+cult status or what makes this reissue significant — not scarcity in a vacuum. This text
+appears for the first 2 seconds, before any voiceover. It is the hook that stops the scroll.
+Pick the most factually unusual detail from Phase 2.
 
 **Standard structure (55-59s)**:
 
@@ -222,14 +246,14 @@ the scroll. Pick the most factually unusual detail from Phase 2.
 |-----------|---------|-------------|
 | 0-3s | **Most dramatic shot** (vinyl reveal / disc close-up / unwrapping) | Hook text (0-2s only) |
 | 3-7s | Front cover full view | — |
-| 7-10s | Front cover close-up / back cover | Artist name + "Album Title" |
-| 10-14s | Inner gatefold / poetry pages | Edition subtitle (e.g., "20th Anniversary") |
-| 14-17s | Back cover / artwork details | Label info |
-| 17-22s | Inside features (booklet pages) | Feature text (e.g., "12-page Insert / ...") |
-| 22-26s | Extra items (patch, poster, etc.) | Feature text for each |
-| 26-30s | Poster displayed / other extras | Feature text |
-| 30-34s | Vinyl pull from sleeve | Vinyl variant text (e.g., "Crystal Clear / Marbled") |
-| 34-38s | Vinyl against light | Same vinyl text |
+| 7-10s | Front cover close-up / back cover | **Band beat** — who they are (e.g., "Ukraine's cult black-metal secret") |
+| 10-14s | Inner gatefold / poetry pages | **Album beat** — title + year + why it matters (e.g., "Forgotten Legends · 2003 — the scene-definer") |
+| 14-17s | Back cover / artwork details | **Reissue beat** — what makes *this* release special (e.g., "First official vinyl in 20 years") |
+| 17-22s | Inside features (booklet pages) | **Edition beat** — contents with a hint of story (e.g., "Restored from the original masters · 12-page insert") |
+| 22-26s | Extra items (patch, poster, etc.) | Edition beat continued (e.g., "Hand-numbered · embroidered patch") |
+| 26-30s | Poster displayed / other extras | Edition beat continued |
+| 30-34s | Vinyl pull from sleeve | **Vinyl payoff** — variant + scarcity (e.g., "Blood-red marble · 300 copies") |
+| 34-38s | Vinyl against light | Same vinyl payoff text |
 | 38-42s | Vinyl on turntable | — |
 | 42-46s | Tonearm / cue lever | — |
 | 46-50s | Stylus close-up | — |
@@ -242,11 +266,11 @@ the scroll. Pick the most factually unusual detail from Phase 2.
 |-----------|---------|-------------|
 | 0-3s | **Most dramatic shot** (vinyl reveal / disc close-up) | Hook text (0-2s only) |
 | 3-6s | Front cover full view | — |
-| 6-9s | Cover close-up | Artist name + "Album Title" |
-| 9-12s | Gatefold / key artwork | Edition subtitle |
-| 12-16s | Best extra (patch / poster / key insert) | Feature text |
-| 16-20s | Vinyl pull from sleeve | Vinyl variant text |
-| 20-24s | Vinyl against light | Same vinyl text |
+| 6-9s | Cover close-up | **Band + album beat** — who they are / what this is (e.g., "Ukraine's cult black-metal · 2003") |
+| 9-12s | Gatefold / key artwork | **Reissue beat** — why this release matters (e.g., "First official vinyl in 20 years") |
+| 12-16s | Best extra (patch / poster / key insert) | **Edition beat** — contents with a hint of story |
+| 16-20s | Vinyl pull from sleeve | **Vinyl payoff** — variant + scarcity (e.g., "Blood-red marble · 300 copies") |
+| 20-24s | Vinyl against light | Same vinyl payoff text |
 | 24-28s | Vinyl on turntable + tonearm | — |
 | 28-35s | Turntable playing + beauty shot | — |
 
@@ -260,15 +284,27 @@ and follow the physical unboxing order.
 For each segment, use ffmpeg to:
 1. Trim the source clip to the desired portion (`-ss` and `-t`)
 2. Scale and pad to 1080x1920 (9:16 portrait)
-3. Apply text overlays where specified (white bold title + lighter subtitle, bottom center, with shadow)
+3. Apply text overlays where specified (white bold title + lighter subtitle, raised to 30% from the bottom (lower third), large for mobile legibility, with shadow)
 
 Text overlay style (use LiberationSans if available, else DejaVuSans):
 ```
-drawtext=fontfile=<bold-font>:text='<title>':fontcolor=white:fontsize=42:
-  x=(w-text_w)/2:y=h-160:shadowcolor=black@0.7:shadowx=3:shadowy=3,
-drawtext=fontfile=<regular-font>:text='<subtitle>':fontcolor=white@0.9:fontsize=30:
-  x=(w-text_w)/2:y=h-110:shadowcolor=black@0.7:shadowx=2:shadowy=2
+drawtext=fontfile=<bold-font>:text='<title>':fontcolor=white:fontsize=64:
+  x=(w-text_w)/2:y=h*0.70:shadowcolor=black@0.7:shadowx=4:shadowy=4,
+drawtext=fontfile=<regular-font>:text='<subtitle>':fontcolor=white@0.9:fontsize=46:
+  x=(w-text_w)/2:y=h*0.70+90:shadowcolor=black@0.7:shadowx=3:shadowy=3
 ```
+
+`y=h*0.70` places the title at 70% down — i.e. 30% up from the bottom — with the subtitle
+stacked ~90px below. Big, raised text reads clearly on a phone and stays clear of platform
+UI chrome at the very bottom of the frame.
+
+**Caption content** — captions tell a mini-story across the reel — **band → album → this
+specific release/reissue** — not a spec sheet. Sequence the on-screen text so a viewer learns
+*who* the band is, *what* this album is and why it matters, and *what makes this exact
+pressing/reissue special* (first-ever vinyl, anniversary edition, remaster, licensed reissue
+of a rare original), before the colorway/copy-count payoff. Keep each line short (title ≤ ~6
+words, subtitle ≤ ~8). **In no-voiceover mode these captions are the only narration**, so they
+must carry the story — not just the technical pressing details.
 
 ### 4c. Concatenate Segments
 
@@ -331,6 +367,10 @@ If the concatenated samples are shorter than the video, pad with `apad` before `
 [aout]apad,atrim=0:<video-duration>,asetpts=PTS-STARTPTS[afinal]
 ```
 
+**No-music mode**: Skip audio mixing entirely — do **not** run `mix_audio.sh` and do **not**
+run the no-voiceover concat above. There is no audio track. The base for export is
+`video_silent.mp4` as produced in Phase 4c.
+
 ### 4e. Combine Video + Audio
 
 **Voiceover mode**: There is **no Ukrainian video**. The Ukrainian output is an audio track
@@ -347,6 +387,13 @@ ffmpeg -y -i video_silent.mp4 -i .work/mixed_audio_en.wav \
 ```bash
 ffmpeg -y -i video_silent.mp4 -i .work/mixed_audio.wav \
   -c:v copy -c:a aac -b:a 192k -shortest assembled_en.mp4
+```
+
+**No-music mode**: There is no audio to combine — use the silent video directly as the
+assembled output:
+
+```bash
+cp video_silent.mp4 assembled_en.mp4
 ```
 
 ## Phase 5: Export & Metadata
@@ -380,6 +427,9 @@ ffmpeg -y \
 
 The `-itsoffset $OVERLAY_OFFSET` delays the animation so it appears at the final 5 seconds.
 It plays once through and stops naturally — no looping.
+
+**No-music mode**: `assembled_en.mp4` has no audio stream, so omit `-map "0:a"` and `-c:a copy`
+from the command above (map only `[out]`). Everything else is identical.
 
 ### 5b. Instagram Version — English (clean, no subscribe)
 
