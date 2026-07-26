@@ -4,7 +4,7 @@ Proven filter chains and encoding settings refined through production use.
 
 ## Table of Contents
 1. [Scale & Pad to Portrait](#scale--pad-to-portrait)
-2. [Text Overlays](#text-overlays)
+2. [Text Overlays (Animated Fade + Slide-Up)](#text-overlays-animated-fade--slide-up)
 3. [Segment Trimming](#segment-trimming)
 4. [Concatenation](#concatenation)
 5. [Subscribe Overlay (Chromakey)](#subscribe-overlay-chromakey)
@@ -25,9 +25,12 @@ orientation and outputs clean 1080x1920:
 -vf "scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:black"
 ```
 
-## Text Overlays
+## Text Overlays (Animated Fade + Slide-Up)
 
-Two-line overlay: bold title + lighter subtitle, centered and raised to ~30% from the bottom, with shadow.
+Two-line overlay: bold title + lighter subtitle, centered and raised to ~30% from the bottom,
+with shadow. Captions animate in — fading 0→100% over 0.35s while rising ~30px into their
+resting spot (ease-out) — and fade out over 0.3s before they end. The subtitle line is
+staggered 0.12s behind the title for a subtle cascade.
 
 Font detection — check availability in this order:
 ```bash
@@ -35,19 +38,38 @@ fc-list | grep -i "liberation"  # Preferred
 fc-list | grep -i "dejavu"      # Fallback
 ```
 
-Two-line text overlay filter:
+Building blocks (`t` is relative to the segment being encoded; `END` = seconds into the
+segment when the caption disappears, usually the segment duration; `DELAY` = 0 for the
+title, 0.12 for the subtitle):
+- fade-in progress: `clip((t-DELAY)/0.35,0,1)`
+- fade-out: `clip((END-t)/0.3,0,1)`
+- combined alpha: `min(` fade-in `,` fade-out `)`
+- rise: resting-y `+ 30*pow(1-` fade-in progress `,2)` (ease-out quad)
+
+Two-line animated overlay filter (expressions with commas must stay single-quoted or the
+filtergraph parser splits on them):
 ```
 drawtext=fontfile=/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf:\
   text='Title Line':fontcolor=white:fontsize=64:\
-  x=(w-text_w)/2:y=h*0.70:\
+  x=(w-text_w)/2:y='h*0.70+30*pow(1-clip(t/0.35,0,1),2)':\
+  alpha='min(clip(t/0.35,0,1),clip((END-t)/0.3,0,1))':\
   shadowcolor=black@0.7:shadowx=4:shadowy=4:\
-  enable='between(t,START,END)',\
+  enable='between(t,0,END)',\
 drawtext=fontfile=/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf:\
   text='Subtitle Line':fontcolor=white@0.9:fontsize=46:\
-  x=(w-text_w)/2:y=h*0.70+90:\
+  x=(w-text_w)/2:y='h*0.70+90+30*pow(1-clip((t-0.12)/0.35,0,1),2)':\
+  alpha='min(clip((t-0.12)/0.35,0,1),clip((END-t)/0.3,0,1))':\
   shadowcolor=black@0.7:shadowx=3:shadowy=3:\
-  enable='between(t,START,END)'
+  enable='between(t,0,END)'
 ```
+
+**Carried-over captions must not re-animate.** Overlays are burned in per segment and `t`
+restarts at 0 in each one, so when the same caption spans consecutive segments (e.g. the
+vinyl payoff across "pull from sleeve" + "against light"), animate only the true entrance
+and exit:
+- **First segment**: fade-in + rise, no fade-out — `alpha='clip(t/0.35,0,1)'`, animated `y`
+- **Continuation segments**: fully static — resting `y`, no `alpha`
+- **Last segment**: static resting `y`, fade-out only — `alpha='clip((END-t)/0.3,0,1)'`
 
 For text with special characters, escape colons and apostrophes:
 ```
@@ -129,17 +151,21 @@ with the reason it matters — the band's cult status or what makes this reissue
 drawtext=fontfile=<bold-font>:text='Only 300 copies worldwide':\
   fontcolor=white:fontsize=52:\
   x=(w-text_w)/2:y=(h-text_h)/2:\
+  alpha='clip((2-t)/0.3,0,1)':\
   shadowcolor=black@0.85:shadowx=4:shadowy=4:\
   enable='between(t,0,2)',\
 drawtext=fontfile=<regular-font>:text='<BAND NAME> — <Album>':\
   fontcolor=white@0.85:fontsize=34:\
   x=(w-text_w)/2:y=(h-text_h)/2+65:\
+  alpha='clip((2-t)/0.3,0,1)':\
   shadowcolor=black@0.7:shadowx=3:shadowy=3:\
   enable='between(t,0,2)'
 ```
 
 The hook text occupies the center of the frame (not the bottom) so it reads clearly over
-any background. It disappears at t=2 — before the voiceover enters at t=3.
+any background. Unlike the lower-third captions it gets **no fade-in** — it must be at full
+opacity on the very first frame (the scroll-stopper and default thumbnail). It fades out
+over the final 0.3s (t=1.7→2.0) — gone before the voiceover enters at t=3.
 
 ## Thumbnail Extraction & Composite
 

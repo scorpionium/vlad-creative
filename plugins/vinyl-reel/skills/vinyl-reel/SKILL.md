@@ -237,8 +237,10 @@ curiosity or scarcity hook pulled from Phase 2 research. Choose ONE of these fra
 
 The strongest hook pairs a hard number or rarity with the *reason it matters* — the band's
 cult status or what makes this reissue significant — not scarcity in a vacuum. This text
-appears for the first 2 seconds, before any voiceover. It is the hook that stops the scroll.
-Pick the most factually unusual detail from Phase 2.
+appears for the first 2 seconds, before any voiceover — at full opacity from the very first
+frame (no fade-in; frame 1 is the scroll-stopper), fading out over the final 0.3s
+(t=1.7→2.0). It is the hook that stops the scroll. Pick the most factually unusual detail
+from Phase 2.
 
 **Standard structure (55-59s)**:
 
@@ -284,19 +286,32 @@ and follow the physical unboxing order.
 For each segment, use ffmpeg to:
 1. Trim the source clip to the desired portion (`-ss` and `-t`)
 2. Scale and pad to 1080x1920 (9:16 portrait)
-3. Apply text overlays where specified (white bold title + lighter subtitle, raised to 30% from the bottom (lower third), large for mobile legibility, with shadow)
+3. Apply text overlays where specified (white bold title + lighter subtitle, raised to 30% from the bottom (lower third), large for mobile legibility, with shadow, animated: fade + slide-up in, fade out)
 
-Text overlay style (use LiberationSans if available, else DejaVuSans):
+Text overlay style (use LiberationSans if available, else DejaVuSans; `END` = seconds into
+the segment when the caption disappears, usually the segment duration):
 ```
 drawtext=fontfile=<bold-font>:text='<title>':fontcolor=white:fontsize=64:
-  x=(w-text_w)/2:y=h*0.70:shadowcolor=black@0.7:shadowx=4:shadowy=4,
+  x=(w-text_w)/2:y='h*0.70+30*pow(1-clip(t/0.35,0,1),2)':
+  alpha='min(clip(t/0.35,0,1),clip((END-t)/0.3,0,1))':
+  shadowcolor=black@0.7:shadowx=4:shadowy=4,
 drawtext=fontfile=<regular-font>:text='<subtitle>':fontcolor=white@0.9:fontsize=46:
-  x=(w-text_w)/2:y=h*0.70+90:shadowcolor=black@0.7:shadowx=3:shadowy=3
+  x=(w-text_w)/2:y='h*0.70+90+30*pow(1-clip((t-0.12)/0.35,0,1),2)':
+  alpha='min(clip((t-0.12)/0.35,0,1),clip((END-t)/0.3,0,1))':
+  shadowcolor=black@0.7:shadowx=3:shadowy=3
 ```
 
 `y=h*0.70` places the title at 70% down — i.e. 30% up from the bottom — with the subtitle
 stacked ~90px below. Big, raised text reads clearly on a phone and stays clear of platform
 UI chrome at the very bottom of the frame.
+
+**Caption animation** — captions fade in over 0.35s while rising ~30px into place
+(ease-out), with the subtitle staggered 0.12s behind the title, and fade out over 0.3s
+before `END`. `t` is segment-relative (restarts at 0 in each encoded segment). When the
+same caption carries across consecutive segments (e.g. the vinyl payoff), animate only the
+true entrance and exit: fade-in + rise on the first segment (drop the fade-out term), fully
+static on continuation segments, fade-out only on the last. See the Text Overlays section
+of `references/ffmpeg_patterns.md` for the building blocks.
 
 **Caption content** — captions tell a mini-story across the reel — **band → album → this
 specific release/reissue** — not a spec sheet. Sequence the on-screen text so a viewer learns
