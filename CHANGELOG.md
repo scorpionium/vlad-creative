@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.4.1] – 2026-07-26
+
+### Changed (`vinyl-reel`) — 0.4.1
+- **Animated captions (fade + slide-up)**: lower-third captions are no longer static — they fade in over 0.35s while rising ~30px into place (ease-out quad), with the subtitle line staggered 0.12s behind the title, and fade out over 0.3s before they end. Implemented with pure `drawtext` `alpha`/`y` expressions (`clip`/`pow`), no new dependencies. Captions that carry over consecutive segments animate only at their true entrance and exit (static on continuation segments, since overlays are burned per segment and `t` restarts at 0). Updated in `SKILL.md` Phase 4b and `references/ffmpeg_patterns.md`.
+- **Hook fade-out**: the 0-2s hook overlay stays at full opacity from the very first frame (no fade-in — frame 1 is the scroll-stopper) and now fades out over its final 0.3s (t=1.7→2.0) instead of hard-cutting.
+
 ## [0.4.0] – 2026-06-29
 
 ### Changed (`vinyl-reel`) — 0.4.0
