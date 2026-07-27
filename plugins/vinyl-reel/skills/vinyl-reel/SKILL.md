@@ -72,6 +72,8 @@ what each clip shows (shelf, cover, inner gatefold, booklet pages, patch, poster
 turntable, beauty shot, etc.).
 
 **Clip categorization**: Based on thumbnails and visual content, mentally categorize each clip:
+- **Presenter** clip: the man holding the LP and raising it toward the camera — this is
+  always the opening clip (see the Opening rule in Phase 4a). Identify it explicitly here.
 - **Intro** clips: record on shelf, pulling from shelf
 - **Cover** clips: front cover, back cover, spine
 - **Inside** clips: gatefold open, inner artwork, booklet/insert pages
@@ -222,9 +224,17 @@ Read <skill-path>/references/ffmpeg_patterns.md
 
 ### 4a. Plan the Edit
 
-**Opening rule**: The first clip must be the most visually dramatic shot available — a colored
-vinyl reveal, spinning disc close-up, or hands unwrapping. Do NOT open with a static album
-cover or shelf shot. Review Phase 1 thumbnails and select the most striking frame as clip 1.
+**Opening rule**: The reel ALWAYS opens with the **presenter clip** — the man holding the LP
+(identified in Phase 1). Trim it precisely:
+- **Start**: the man is already fully in the frame and begins raising the record — cut off
+  any footage of him walking/stepping into frame before that.
+- **End**: right before the man leaves the frame — cut before any part of him exits.
+
+Scrub the clip (extract frames around the candidate in/out points with
+`ffmpeg -ss <t> -i <clip> -vframes 1`) to find these exact timestamps rather than guessing.
+Do NOT open with a static album cover or shelf shot. Only if no presenter clip exists in the
+footage, fall back to the most visually dramatic shot available (colored vinyl reveal,
+spinning disc close-up, hands unwrapping).
 
 **Hook text overlay (0-2s)**: The very first 2 seconds carry a bold text overlay with a
 curiosity or scarcity hook pulled from Phase 2 research. Choose ONE of these framings:
@@ -246,16 +256,16 @@ from Phase 2.
 
 | Timestamp | Content | Text Overlay |
 |-----------|---------|-------------|
-| 0-3s | **Most dramatic shot** (vinyl reveal / disc close-up / unwrapping) | Hook text (0-2s only) |
+| 0-3s | **Presenter clip** — man raising the LP (trimmed per Opening rule) | Hook text (0-2s only) |
 | 3-7s | Front cover full view | — |
 | 7-10s | Front cover close-up / back cover | **Band beat** — who they are (e.g., "Ukraine's cult black-metal secret") |
 | 10-14s | Inner gatefold / poetry pages | **Album beat** — title + year + why it matters (e.g., "Forgotten Legends · 2003 — the scene-definer") |
 | 14-17s | Back cover / artwork details | **Reissue beat** — what makes *this* release special (e.g., "First official vinyl in 20 years") |
 | 17-22s | Inside features (booklet pages) | **Edition beat** — contents with a hint of story (e.g., "Restored from the original masters · 12-page insert") |
-| 22-26s | Extra items (patch, poster, etc.) | Edition beat continued (e.g., "Hand-numbered · embroidered patch") |
-| 26-30s | Poster displayed / other extras | Edition beat continued |
+| 22-26s | Extra items (patch, poster, etc.) | Edition beat continued — NEW detail (e.g., "Hand-numbered · embroidered patch") |
+| 26-30s | Poster displayed / other extras | Edition beat continued — NEW detail (never re-show an earlier line) |
 | 30-34s | Vinyl pull from sleeve | **Vinyl payoff** — variant + scarcity (e.g., "Blood-red marble · 300 copies") |
-| 34-38s | Vinyl against light | Same vinyl payoff text |
+| 34-38s | Vinyl against light | Vinyl payoff carried over (one continuous caption — not re-shown) |
 | 38-42s | Vinyl on turntable | — |
 | 42-46s | Tonearm / cue lever | — |
 | 46-50s | Stylus close-up | — |
@@ -266,17 +276,21 @@ from Phase 2.
 
 | Timestamp | Content | Text Overlay |
 |-----------|---------|-------------|
-| 0-3s | **Most dramatic shot** (vinyl reveal / disc close-up) | Hook text (0-2s only) |
+| 0-3s | **Presenter clip** — man raising the LP (trimmed per Opening rule) | Hook text (0-2s only) |
 | 3-6s | Front cover full view | — |
 | 6-9s | Cover close-up | **Band + album beat** — who they are / what this is (e.g., "Ukraine's cult black-metal · 2003") |
 | 9-12s | Gatefold / key artwork | **Reissue beat** — why this release matters (e.g., "First official vinyl in 20 years") |
 | 12-16s | Best extra (patch / poster / key insert) | **Edition beat** — contents with a hint of story |
 | 16-20s | Vinyl pull from sleeve | **Vinyl payoff** — variant + scarcity (e.g., "Blood-red marble · 300 copies") |
-| 20-24s | Vinyl against light | Same vinyl payoff text |
+| 20-24s | Vinyl against light | Vinyl payoff carried over (one continuous caption — not re-shown) |
 | 24-28s | Vinyl on turntable + tonearm | — |
 | 28-35s | Turntable playing + beauty shot | — |
 
 Skip any segment where no good clip exists. Tight-cut total must be 35-45 seconds.
+
+In both structures, use the **full trimmed presenter clip** (raise start → just before exit)
+even if it runs longer than the 3-second slot — shift the subsequent timestamps and, if
+needed, trim the turntable/playing sections to stay within the total length target.
 
 Clips that don't exist in the footage can be skipped. The arrangement should feel natural
 and follow the physical unboxing order.
@@ -320,6 +334,14 @@ pressing/reissue special* (first-ever vinyl, anniversary edition, remaster, lice
 of a rare original), before the colorway/copy-count payoff. Keep each line short (title ≤ ~6
 words, subtitle ≤ ~8). **In no-voiceover mode these captions are the only narration**, so they
 must carry the story — not just the technical pressing details.
+
+**No repeated subtitles**: every caption line (title and subtitle) must be unique across the
+entire reel. Never show the same text twice. When a beat spans consecutive segments (e.g. the
+vinyl payoff), that is ONE continuous caption carried across the cut (static on continuation
+segments, per the animation rules above) — not the caption shown again. Once a caption has
+faded out, its text must never reappear later in the reel; write a new line or leave the
+segment caption-free. Before encoding, list all planned captions and verify no title or
+subtitle text occurs more than once.
 
 ### 4c. Concatenate Segments
 

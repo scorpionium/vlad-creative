@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.4.2] – 2026-07-26
+
+### Changed (`vinyl-reel`) — 0.4.2
+- **Presenter opening clip**: the reel now always opens with the clip of the man holding the LP — trimmed to start when he is already fully in frame and begins raising the record, and to end right before he leaves the frame (frame-scrub the in/out points, don't guess). Phase 1 gains an explicit **Presenter** clip category; both structure tables open with it; the previous “most dramatic shot” rule remains only as a fallback when no presenter clip exists. If the trimmed clip runs past the 3-second slot it is kept in full and the rest of the timeline shifts.
+- **No repeated subtitles**: every caption line must be unique across the reel. A beat spanning consecutive segments is one continuous carried-over caption (static on continuation segments), never a re-shown one, and text that has faded out must not reappear later. Structure-table rows that implied repetition (“Same vinyl payoff text”, “Edition beat continued”) now say carried-over / NEW detail, and Phase 4b instructs verifying all planned captions for duplicates before encoding.
+
 ## [0.4.1] – 2026-07-26
 
 ### Changed (`vinyl-reel`) — 0.4.1
