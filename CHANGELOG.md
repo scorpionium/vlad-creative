@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.3.0] – 2026-07-29
+
+### Changed (`discography-reel`) — 0.3.0
+- **Animated album labels (fade + slide-up)**: the album-name overlay is no longer static — on each cover sub-clip it fades in over 0.35s while rising ~30px into place (ease-out quad, pure `drawtext` `alpha`/`y` expressions, no new dependencies). The turntable sub-clip keeps a static label (continuation), and the album-boundary crossfade dissolves it out — vinyl-reel's carry-over rule applied to the two-sub-clip model.
+- **Outro end card**: the reel now closes with a 4-second end card — darkened 45% with two animated text lines: "What is your favorite album?" / "Let me know in the comments." The background is an optional user-provided ending clip (dropped into a new top-level `outro/` folder; first 4s used) or, by default, the final turntable frame frozen (extracted from the raw source so no album label is burned in). Outro audio auto-detects: a clip with its own audio track keeps it (final fade shortens to 1s so a spoken ask isn't faded down); otherwise the last album's music continues into the card and fades out over 3s. Text holds to the last frame (comment prompt + Shorts loop point).
+- **Timing reserves the outro**: `section_sec = floor(55 / N)` (was `floor(59 / N)`); `total_sec = section_sec * N + 4` stays ≤59s. Split thresholds shift accordingly: 3s/album at N=14–18 (was 15–19), forced split at N≥19 (was ≥20). Phase 3 warns (non-blocking) when the last album's audio is shorter than `section_sec + 4`.
+- **Audio fade-out fix**: the clean-export fade start is now derived from the ffprobe'd duration of assembled.mp4 instead of `total_sec` — the old computation landed past end-of-file for N≥3 (crossfade overlap), so no fade was applied at all. Fade is now 3s, breathing out across the end card.
+- **Subscribe overlay**: added `eof_action=pass` (parity with vinyl-reel 0.1.5) so the base video continues cleanly after the animation ends.
+- **Docs refresh**: `references/ffmpeg_patterns.md` rewritten to the two-sub-clip model (segment build, mixed 0.3/0.5 crossfade offset formula, bundled subscribe asset path — stale vinyl-reel fallback removed) plus a new outro pattern section; README input structure corrected to 2 video clips per album.
+
 ## [0.4.2] – 2026-07-26
 
 ### Changed (`vinyl-reel`) — 0.4.2
