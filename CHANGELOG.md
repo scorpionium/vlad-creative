@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.4.0] – 2026-07-30
+
+### Changed (`discography-reel`) — 0.4.0
+- **Optional 3s intro clip**: a new top-level `intro/` folder (mirroring `outro/`) can hold one clip whose first 3 seconds open the reel. The 3s come out of the ≤59s budget — `section_sec = floor((59 - 4 - intro_sec) / N)` — with new reference tables for the intro variants. Audio auto-detects like the outro: a clip with its own audio keeps it and crossfades into album 1's music; a silent clip gets album 1's music started under it (album 1's sample shifts by 3s via `album1_audio_base`, including the outro seek in the N=1 edge case). Phase 2 asks up front whether an intro is planned; Phase 3 reconciles if the folder contents contradict the answer.
+- **"Full BAND NAME Discography" opening title**: the reel's first text. Over the intro clip it gets the album-label treatment (top position, box, animated entrance, held all 3s); with no intro it renders mid-frame (no box) over album 1's first sub-clip, animating in at t=0 and fading out by ~2s while the album label runs at the top simultaneously.
+- **Bigger text**: album labels and the opening title use a tiered size rule — 64px up to 24 chars, 48px for 25–34, 40px from 35 (string counted with the ` (Year)` suffix) — replacing the flat 40px. Outro end card bumped from 56/44px to 64/48px (CTA line offset 100→120px).
+- **Album scope option**: Phase 1 now asks whether to cover studio albums only (default, unchanged) or studio albums + EPs — EPs merge chronologically into the numbered timeline (singles/compilations/live/demos/box sets still excluded) and metadata titles/descriptions/lists annotate them (`[EP]`, "Albums + EPs", UA "альбоми та EP").
+- **Optional 3-clips-per-album mode**: chosen once per run in Phase 2 — `1_showing.*` (person showing the LP) + `2_cover.*` + `3_turntable.*` instead of the 2-clip `1_cover.*`/`2_turntable.*`. Split: showing fixed at 2s, `cover = min(4, max(2, section_sec - 4))`, turntable the remainder; minimum viable section rises to 6s (at 4–5s the skill offers splitting the reel or dropping to 2-clip mode). Album label animates on the showing clip and stays static on cover + turntable. `scan_assets.py` gains `--clips 2|3` (argparse; 2-clip JSON output unchanged, 3-clip adds `showing_video` fields and top-level `clips_per_album`).
+- **Explicit crossfade rule**: the fragile even/odd index-parity rule is replaced by a destination rule — transitions into any album's first sub-clip or into the outro run 0.5s, into continuation sub-clips 0.3s — which handles the intro segment, both clip modes, and skipped sub-clips uniformly. `ffmpeg_patterns.md` worked example replaced with an intro + 3-clip chain (8 segments, offsets computed).
+
 ## [0.3.0] – 2026-07-29
 
 ### Changed (`discography-reel`) — 0.3.0
