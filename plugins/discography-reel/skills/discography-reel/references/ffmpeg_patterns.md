@@ -28,6 +28,27 @@ regardless of source aspect ratio, with black bars (letterbox/pillarbox) as need
 - `force_original_aspect_ratio=decrease` — scales down to fit within 1080x1920
 - `pad` — centers the scaled frame, fills remainder with black
 
+**Landscape sources — rotate to portrait.** A genuinely horizontal clip would otherwise
+be letterboxed into a thin strip. Detect orientation on **display** dimensions (rotation
+metadata applied — `scan_assets.py` reports this as `*_video_orientation`; for intro/outro
+clips probe manually):
+```bash
+ffprobe -v quiet -select_streams v:0 \
+  -show_entries "stream=width,height:stream_side_data=rotation" -of json "<clip>"
+# swap width/height when |rotation| is 90/270; landscape = width > height
+```
+For each landscape clip, prepend a transpose **before** `scale`:
+```bash
+-vf "transpose=1,scale=1080:1920:force_original_aspect_ratio=decrease,pad=1080:1920:(ow-iw)/2:(oh-ih)/2:black"
+```
+- `transpose=1` — 90° clockwise (default); `transpose=2` — 90° counterclockwise (for
+  clips the user flagged as tilted the other way)
+- ffmpeg auto-applies rotation metadata on decode, so metadata-rotated phone clips
+  (stored landscape, tagged 90°) need **no** transpose — only display-landscape footage
+  gets one
+- Applies everywhere a video source enters a filter chain: album sub-clips, the intro
+  clip, the outro clip, and the freeze-frame extraction
+
 ---
 
 ## Text Overlay — Top of Frame (Animated)

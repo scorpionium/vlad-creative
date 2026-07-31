@@ -330,7 +330,10 @@ python3 <skill-path>/scripts/scan_assets.py "<Band Name> Discography" --clips <2
 ```
 
 The script outputs JSON with `errors[]` and per-album asset paths (in 3-clip mode each
-album gains `showing_video` + `showing_video_duration`).
+album gains `showing_video` + `showing_video_duration`). Every video also carries a
+`*_video_orientation` field — `portrait` or `landscape`, computed on **display**
+dimensions (rotation metadata already applied), so only genuinely sideways footage is
+reported as landscape.
 
 **If errors exist:** list every error clearly (missing video, missing audio, multiple files
 found, unreadable file). Stop. Tell the user to fix the listed folders and confirm again.
@@ -365,6 +368,18 @@ checks (the scan script does not cover `intro/` or `outro/`):
    album 1's sample also plays under the intro, so warn if album 1's `audio_duration` is
    less than `intro_sec + section_sec` (the tail of its section will be silent — `apad`
    covers it).
+5. **Landscape clips (rotate to portrait):** collect every video the scan reported as
+   `landscape`, and probe the intro/outro clips the same way (display dimensions —
+   ffprobe `stream=width,height` + `stream_side_data=rotation`, swapping width/height
+   when |rotation| is 90/270). If any are landscape, list them and tell the user:
+
+   > "These clips are horizontal — I'll rotate them 90° clockwise to fill the vertical
+   > frame: <list>. If any were shot tilted the other way, name them and I'll rotate
+   > those counterclockwise instead."
+
+   Record the rotation direction per landscape clip (default clockwise → `transpose=1`,
+   counterclockwise → `transpose=2`). Phase 4 prepends the transpose to those clips'
+   filter chains.
 
 Then continue to Phase 4.
 
@@ -554,6 +569,12 @@ Sub-clips are never skipped in 3-clip mode (the minimum section of 6s guarantees
 sub-clip is ≥ 2s).
 
 Notes (both modes):
+- **Rotation rule (applies to every video source in 4b, 4b2, and 4c):** for any clip
+  Phase 3 flagged as landscape, prepend `transpose=1,` (90° clockwise; `transpose=2,` for
+  clips the user flagged counterclockwise) to the `-vf` chain, **before** `scale`. After
+  the transpose the frame is portrait and the standard scale/pad applies unchanged.
+  ffmpeg auto-applies rotation metadata on decode, so metadata-rotated phone clips need
+  no transpose — only clips whose display orientation is genuinely landscape get one.
 - The drawtext `alpha` expression also fades the `box=1` background and shadow, so box and
   text rise and fade in together — this is the intended look.
 - This produces `clips_per_album * N` segments total (minus any skipped 2-clip B segments).
@@ -604,7 +625,8 @@ Album 1's sub-clips then continue its sample from `t=3` via `album1_audio_base =
 (see 4b), so the music plays continuously from the intro into album 1's section.
 
 If the intro clip is shorter than 3s, append `tpad=stop_mode=clone` to the `-vf` chain
-(before `drawtext`) so the last frame holds; `apad` covers the audio.
+(before `drawtext`) so the last frame holds; `apad` covers the audio. If the intro clip
+is landscape, the rotation rule (4b) applies — `transpose` before `scale`.
 
 #### Without intro clip — opening title on album 1
 
@@ -689,7 +711,8 @@ right after the clip input — the rest of the command is identical:
   -ss <last_ss> -t 4 -i "<last_audio>" \
 ```
 If the clip is shorter than 4s, append `tpad=stop_mode=clone` to the `-vf` chain (before
-`drawbox`) so the last frame holds; `apad` already covers the audio.
+`drawbox`) so the last frame holds; `apad` already covers the audio. If the outro clip is
+landscape, the rotation rule (4b) applies — `transpose` before `scale`.
 
 The chain's final 0.5s `acrossfade` (4d) blends the last album's music into whichever audio
 the outro carries — no extra handling needed at the boundary.
@@ -716,6 +739,8 @@ ffmpeg -y -ss <last_t> -i "<last_video>" -frames:v 1 \
 ```
 If no frame is produced (e.g. the source is shorter than `<last_t>` because the segment was
 tpad-padded), retry with `-sseof -0.5 -i "<last_video>"` in place of the `-ss` seek.
+If `<last_video>` is landscape, the rotation rule (4b) applies here too — `transpose`
+before `scale` — so the frozen frame matches the rotated segment it follows.
 
 **Step 2 — build the outro segment:**
 ```bash
@@ -973,6 +998,11 @@ When an intro clip was used, add: "The reel opens with your 3 s intro clip under
   This also covers an intro clip shorter than 3s.
 - **Font not found:** Try `fc-list` to find any available bold TTF. If none, omit
   `fontfile=` — ffmpeg will use its default font (text will still render, just less styled).
+- **Landscape source rotated the wrong way:** the Phase 3 prompt defaults to clockwise
+  (`transpose=1`); if the user reports upside-down or mirrored output for a clip, rebuild
+  that segment with `transpose=2` (counterclockwise). Never rotate clips whose landscape
+  storage is metadata-only (scan orientation says `portrait`) — ffmpeg already
+  auto-rotates those on decode.
 - **Crossfade offset calculation:** If the filter_complex fails with offset errors,
   double-check that the O_i values are strictly increasing and rounded to 2 decimal places.
 - **assembled.mp4 duration check:** After assembly, verify duration with ffprobe. When no

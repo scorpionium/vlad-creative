@@ -41,7 +41,9 @@ def probe_clip(filepath):
     """Get file metadata using ffprobe. Returns parsed JSON or None on error."""
     cmd = [
         "ffprobe", "-v", "quiet",
-        "-show_entries", "format=duration:stream=width,height,codec_name,codec_type",
+        "-show_entries",
+        "format=duration:stream=width,height,codec_name,codec_type"
+        ":stream_side_data=rotation:stream_tags=rotate",
         "-of", "json",
         str(filepath)
     ]
@@ -63,6 +65,43 @@ def get_duration(filepath):
         return float(info["format"]["duration"])
     except (KeyError, ValueError, TypeError):
         return None
+
+
+def get_video_info(filepath):
+    """Return {"duration", "orientation"} for a video file, or None if unreadable.
+
+    Orientation is computed on DISPLAY dimensions — rotation metadata
+    (displaymatrix side data or a legacy rotate tag) is applied first, so a
+    phone clip stored landscape but tagged 90° counts as portrait.
+    """
+    info = probe_clip(filepath)
+    if info is None:
+        return None
+    try:
+        duration = float(info["format"]["duration"])
+    except (KeyError, ValueError, TypeError):
+        return None
+    orientation = None
+    for stream in info.get("streams", []):
+        width, height = stream.get("width"), stream.get("height")
+        if not (width and height):
+            continue
+        rotation = 0
+        for side_data in stream.get("side_data_list", []):
+            if "rotation" in side_data:
+                try:
+                    rotation = int(side_data["rotation"])
+                except (ValueError, TypeError):
+                    pass
+        try:
+            rotation = int(stream.get("tags", {}).get("rotate", rotation))
+        except (ValueError, TypeError):
+            pass
+        if abs(rotation) % 180 == 90:
+            width, height = height, width
+        orientation = "landscape" if width > height else "portrait"
+        break
+    return {"duration": duration, "orientation": orientation}
 
 
 def find_files_by_extension(folder, extensions):
@@ -111,6 +150,7 @@ def main():
         album_entry["audio_file"] = None
         for role in roles:
             album_entry[f"{role}_video_duration"] = None
+            album_entry[f"{role}_video_orientation"] = None
         album_entry["audio_duration"] = None
         album_entry["valid"] = True
 
@@ -128,13 +168,14 @@ def main():
                 album_entry["valid"] = False
             else:
                 for role, vf in zip(roles, video_files):
-                    duration = get_duration(vf)
-                    if duration is None:
+                    vinfo = get_video_info(vf)
+                    if vinfo is None:
                         errors.append(f"{album_name}/video/{vf.name}: ffprobe could not read file")
                         album_entry["valid"] = False
                     else:
                         album_entry[f"{role}_video"] = str(vf)
-                        album_entry[f"{role}_video_duration"] = round(duration, 2)
+                        album_entry[f"{role}_video_duration"] = round(vinfo["duration"], 2)
+                        album_entry[f"{role}_video_orientation"] = vinfo["orientation"]
 
         # Check audio/ folder
         if not audio_folder.exists():
