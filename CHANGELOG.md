@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.4.1] – 2026-07-30
+
+### Changed (`discography-reel`) — 0.4.1
+- **Landscape clips rotated to portrait**: `scan_assets.py` now reports a `*_video_orientation` field per clip, computed on display dimensions (displaymatrix/rotate metadata applied first, so metadata-rotated phone clips are not falsely flagged). Phase 3 lists any genuinely horizontal clips — including intro/outro clips, probed the same way — and rotates them 90° clockwise by default (`transpose=1` prepended before `scale`), with a prompt to flag clips that should rotate counterclockwise (`transpose=2`) instead. The rule applies to album sub-clips, the intro clip, the outro clip, and the freeze-frame extraction.
+
 ## [0.4.0] – 2026-07-30
 
 ### Changed (`discography-reel`) — 0.4.0

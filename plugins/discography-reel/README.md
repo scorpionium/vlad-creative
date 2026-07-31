@@ -21,7 +21,7 @@ Or describe what you want — "make a discography reel for Drudkh" — and the s
 
 1. **Research** — asks whether to cover studio albums only or albums + EPs, looks up the discography (Wikipedia + corroboration), computes per-album timing
 2. **Create folders + PAUSE** — asks clips per album (2: cover + turntable, or 3: showing + cover + turntable) and whether you'll add a 3s intro clip; creates `<Band> Discography/NN_<Album>_(<Year>)/video/` and `audio/` for every release plus `intro/` and `outro/`; waits for you to drop in the clips and one audio file per album, then asks for per-album cover start offsets
-3. **Scan & validate** — verifies all asset folders before assembly
+3. **Scan & validate** — verifies all asset folders before assembly; horizontal (landscape) clips are detected and rotated 90° to portrait (clockwise by default, tell it which ones go counterclockwise)
 4. **Assemble & export** — builds per-album segments with animated album labels, opens with the intro/title, appends the 4s outro end card, concatenates with crossfades, exports two MP4s and metadata
 
 ## Input folder structure (auto-created in Phase 2)
